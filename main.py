@@ -116,7 +116,7 @@ with colA:
         df_original = carregar_pedidos()
 
         st.success("Planilha atualizada!")
-        
+
         for _, linha_editada in editado.iterrows():
 
             id_atual = linha_editada["N° da Ordem"]       # ID único
@@ -148,7 +148,7 @@ with colB:
             ordem = linha["N° da Ordem"]
             data = linha["Data Agendada"]
             hora = linha["Hora Agendada"]
-            mensagem = f"Assistente de Agendamento-Fibra \n\n Olá {consultor}, lembrete do seu agendamento de hoje! \n N° da ordem: {ordem} \n Data de agendamento: {data} \n Hora Agendada {hora} \n por gentileza verificar o andamento da instalação ou informar a pessoa responsavel por visualizar dos andamentos da fibra"
+            mensagem = f"Assistente de Agendamento-Fibra \n\n Olá {consultor}, lembrete do seu agendamento de hoje! \n N° da ordem: {ordem} \n Data de agendamento: {data} \n Hora Agendada {hora} \n Por gentileza verificar o andamento da instalação ou informar a pessoa responsavel por visualizar dos andamentos da fibra"
             enviar_email(email, "Lembrete de Agendamento", mensagem)
 
         st.success(f"Lembretes enviados para {len(agendamentos_hoje)} consultores.")
