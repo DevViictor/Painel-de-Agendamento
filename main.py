@@ -92,7 +92,7 @@ if data_filtro:
     data_str = data_filtro.strftime("%d/%m/%Y")
     planilha_Dados = planilha_Dados[planilha_Dados["Data Agendada"] == data_str]
 
-status_opcoes = ["Pendente(Agendamento)","Pendente (Retenção)","Concluído", "Cancelado"]
+status_opcoes = ["Concluído","Agendada","Pendente(Agendamento)","Pendente (Retenção)", "Cancelado"]
 
 #---STATUS DO AGENDAMENTO ---
 editado = st.data_editor(
@@ -129,7 +129,7 @@ with colA:
                 idx_sheet = linha_original.index[0] + 2  
                 # +2 (linha 1 = cabeçalho, linha 2 = primeira linha de dados)
                 # Descobre qual coluna é "Status"
-                coluna_status = df_original.columns.get_loc("Status") + 1
+                coluna_status = df_original.columns.get_loc("Status da Fibra") + 1
 
                 # Atualiza apenas o STATUS na célula certa
                 aba.update_cell(idx_sheet, coluna_status, novo_status)
