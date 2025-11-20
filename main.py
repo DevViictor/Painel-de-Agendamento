@@ -112,29 +112,32 @@ colA, colB, colC = st.columns([1, 1, 6])
 # ====== Salvar alterações ======
 with colA:
     if st.button("Salvar alterações"):
-         df_original = carregar_pedidos()
+         
+        df_original = carregar_pedidos()
 
-         for _, linha_editada in editado.iterrows():
+        st.success("Planilha atualizada!")
+        
+        for _, linha_editada in editado.iterrows():
 
-                id_atual = linha_editada["N° da Ordem"]       # ID único
-                novo_status = linha_editada["Status da Fibra"]         # novo valor
+            id_atual = linha_editada["N° da Ordem"]       # ID único
+            novo_status = linha_editada["Status da Fibra"]         # novo valor
 
-                # Procura a mesma linha na planilha original
-                linha_original = df_original[df_original["N° da Ordem"] == id_atual]
+            # Procura a mesma linha na planilha original
+            linha_original = df_original[df_original["N° da Ordem"] == id_atual]
 
-                if linha_original.empty:
-                    continue
+            if linha_original.empty:
+                continue
 
-                # Índice da linha dentro da planilha
-                idx_sheet = linha_original.index[0] + 2  
-                # +2 (linha 1 = cabeçalho, linha 2 = primeira linha de dados)
-                # Descobre qual coluna é "Status"
-                coluna_status = df_original.columns.get_loc("Status da Fibra") + 1
+            # Índice da linha dentro da planilha
+            idx_sheet = linha_original.index[0] + 2  
+            # +2 (linha 1 = cabeçalho, linha 2 = primeira linha de dados)
+            # Descobre qual coluna é "Status"
+            coluna_status = df_original.columns.get_loc("Status da Fibra") + 1
 
-                # Atualiza apenas o STATUS na célula certa
-                aba.update_cell(idx_sheet, coluna_status, novo_status)
+            # Atualiza apenas o STATUS na célula certa
+            aba.update_cell(idx_sheet, coluna_status, novo_status)
 
-                st.success("Planilha atualizada!")
+        
 
 with colB:
     if st.button("Enviar lembrete"):
