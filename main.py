@@ -46,7 +46,13 @@ planilha_Dados = carregar_pedidos()
 
 hoje =  date.date.today().strftime("%d/%m/%Y")
 
-planilha_Dados["Data Agendada"] = pd.to_datetime(planilha_Dados["Data Agendada"]).dt.strftime("%d/%m/%Y")
+planilha_Dados["Data Agendada"] = (
+    pd.to_datetime(
+        planilha_Dados["Data Agendada"],
+        errors="coerce",
+        dayfirst=True
+    ).dt.strftime("%d/%m/%Y")
+)
 
 agendamentos_hoje = planilha_Dados[planilha_Dados["Data Agendada"] == hoje]
 
