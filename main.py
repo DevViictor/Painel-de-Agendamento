@@ -148,7 +148,7 @@ with colB:
             ordem = linha["SDR FIXA"]
             data = linha["Data Agendada"]
             hora = linha["Hora Agendada"]
-            mensagem = f"Assistente de Agendamento-Fibra \n\n Olá {consultor}, lembrete do seu agendamento de hoje! \n N° da ordem: {ordem} \n Data de agendamento: {data} \n Hora Agendada {hora} \n Por gentileza, verifique o andamento da instalação ou informarme a pessoa responsável por acompanhar os andamentos da fibra."
+            mensagem = f"Assistente de Agendamento-Fibra \n\n Olá {consultor}, lembrete do seu agendamento de hoje! \n SDR FIXA: {ordem} \n Data de agendamento: {data} \n Hora Agendada {hora} \n Por gentileza, verifique o andamento da instalação ou informarme a pessoa responsável por acompanhar os andamentos da fibra."
             enviar_email(email, "Lembrete de Agendamento", mensagem)
 
         st.success(f"Lembretes enviados para {len(agendamentos_hoje)} consultores.")
