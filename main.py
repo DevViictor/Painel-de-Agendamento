@@ -73,7 +73,7 @@ with col2:
     nome_filtro = st.text_input("🔍 Buscar por consultor")
 
 with col3:
-    ordem_filtro = st.text_input("🔍 Buscar por N° ordem")
+    ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa")
 
 with col4:
     data_filtro = st.date_input("🔍 Buscar por data")
@@ -86,7 +86,7 @@ if nome_filtro:
     planilha_Dados = planilha_Dados[planilha_Dados["Consultor"].str.contains(nome_filtro,case =False)]
 
 if ordem_filtro:
-    planilha_Dados = planilha_Dados[planilha_Dados["N° da Ordem"].str.contains(ordem_filtro,case =False)]
+    planilha_Dados = planilha_Dados[planilha_Dados["SDR FIXA"].str.contains(ordem_filtro,case =False)]
 
 if data_filtro:
     data_str = data_filtro.strftime("%d/%m/%Y")
@@ -119,11 +119,11 @@ with colA:
 
         for _, linha_editada in editado.iterrows():
 
-            id_atual = linha_editada["N° da Ordem"]       # ID único
+            id_atual = linha_editada["SDR FIXA"]       # ID único
             novo_status = linha_editada["Status da Fibra"]         # novo valor
 
             # Procura a mesma linha na planilha original
-            linha_original = df_original[df_original["N° da Ordem"] == id_atual]
+            linha_original = df_original[df_original["SDR FIXA"] == id_atual]
 
             if linha_original.empty:
                 continue
@@ -145,7 +145,7 @@ with colB:
 
             email = linha["Email"]
             consultor = linha["Consultor"]
-            ordem = linha["N° da Ordem"]
+            ordem = linha["SDR FIXA"]
             data = linha["Data Agendada"]
             hora = linha["Hora Agendada"]
             mensagem = f"Assistente de Agendamento-Fibra \n\n Olá {consultor}, lembrete do seu agendamento de hoje! \n N° da ordem: {ordem} \n Data de agendamento: {data} \n Hora Agendada {hora} \n Por gentileza, verifique o andamento da instalação ou informarme a pessoa responsável por acompanhar os andamentos da fibra."
