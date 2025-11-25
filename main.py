@@ -54,6 +54,7 @@ planilha_Dados["Data Agendada"] = (
     ).dt.strftime("%d/%m/%Y")
 )
 
+#---CONFIGURAÇÃO DE DATA---
 agendamentos_hoje = planilha_Dados[planilha_Dados["Data Agendada"] == hoje]
 
 # ---CONFIGURAÇÃO DE PAGINA---
@@ -64,6 +65,7 @@ st.title("🌐 Painel de Agendamentos - Fibra")
 col1,col2,col3,col4 = st.columns(4)
 
 lojas = [" ","LOJA IGUATEMI | BA" , "LOJA IGUATEMI || BA"]
+
 
 #---APLICAÇÃO DE FILTROS---
 with col1:
@@ -78,7 +80,7 @@ with col3:
 with col4:
     data_filtro = st.date_input("🔍 Buscar por data")
 
-
+#---CONDIÇÕES DE FILTRO
 if loja_filtro:
     planilha_Dados = planilha_Dados[planilha_Dados["Loja"].str.contains(loja_filtro,case =False)]
 
@@ -103,7 +105,9 @@ editado = st.data_editor(
             options=status_opcoes,
             help="Selecione o status",
             required=True
-        )
+        ),
+        "Observação": st.column_config.TextColumn("Observação",
+        required=False),
     },
     hide_index=True
 )
@@ -133,11 +137,14 @@ with colA:
             # +2 (linha 1 = cabeçalho, linha 2 = primeira linha de dados)
             # Descobre qual coluna é "Status"
             coluna_status = df_original.columns.get_loc("Status da Fibra") + 1
+            
+            coluna_obs = df_original.columns.get_loc("Observação") + 1
+
+            nova_observacao = linha_editada["Observação"]
 
             # Atualiza apenas o STATUS na célula certa
             aba.update_cell(idx_sheet, coluna_status, novo_status)
-
-        
+            aba.update_cell(idx_sheet, coluna_obs, nova_observacao)
 
 with colB:
     if st.button("Enviar lembrete"):
