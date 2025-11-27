@@ -147,7 +147,7 @@ with colA:
             aba.update_cell(idx_sheet, coluna_obs, nova_observacao)
 
 with colB:
-    if st.button("Enviar lembrete"):
+    if st.button("📩 Enviar lembrete"):
         for _, linha in agendamentos_hoje.iterrows():
 
             email = linha["Email"]
