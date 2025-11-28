@@ -111,6 +111,10 @@ if windows == "Agendamentos - Fibra":
             ),
             "Observação": st.column_config.TextColumn("Observação",
             required=False),
+            "Data Agendada": st.column_config.TextColumn("Data Agendada",
+            required=False),
+            "Hora Agendada": st.column_config.TextColumn("Hora Agendada",
+            required=False),
         },
         hide_index=True
     )
@@ -143,11 +147,22 @@ if windows == "Agendamentos - Fibra":
                 
                 coluna_obs = df_original.columns.get_loc("Observação") + 1
 
+                coluna_data = df_original.columns.get_loc("Data Agendada") + 1 
+
+                coluna_hora = df_original.columns.get_loc("Hora Agendada") + 1
+
                 nova_observacao = linha_editada["Observação"]
+
+                nova_data = linha_editada["Data Agendada"]
+
+                nova_hora = linha_editada["Hora Agendada"]
+
 
                 # Atualiza apenas o STATUS na célula certa
                 aba.update_cell(idx_sheet, coluna_status, novo_status)
                 aba.update_cell(idx_sheet, coluna_obs, nova_observacao)
+                aba.update_cell(idx_sheet, coluna_data, nova_data)
+                aba.update_cell(idx_sheet , coluna_hora , nova_hora)
 
     # ==== ENVIAR LEMBRETE NO EMAIL ====
     with colB:
