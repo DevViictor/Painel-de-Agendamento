@@ -16,7 +16,6 @@ if "logged_in" not in st.session_state:
 
 def login():
     st.title("Login")
-
     user = st.text_input("Usuário:")
     password = st.text_input("Senha:", type="password")
 
@@ -39,7 +38,9 @@ def logout():
 if not st.session_state.logged_in:
     login()
 else:
-    st.title(f"Bem-vindo, {st.session_state.user}")
-    st.sidebar.button("Sair", on_click=logout)
+    # 🔥 Nome fixo para o menu lateral
+    st.title("Login")
 
+    st.subheader(f"Bem-vindo, {st.session_state.user}")
+    st.sidebar.button("Sair", on_click=logout)
     st.write("Use o menu à esquerda para acessar a página.")
