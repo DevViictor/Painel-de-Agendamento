@@ -6,10 +6,15 @@ import datetime as date
 import smtplib
 from email.mime.text import MIMEText
 
+
+if "role" not in st.session_state or st.session_state.role != "loja2":
+    st.error("⚠️ Acesso negado!")
+    st.stop()
+
 #Função para enviar email
 def enviar_email(destinatario, assunto, mensagem):
-    remetente = "victorritossantos@gmail.com"
-    senha_app = "tqpb nefl vxxc uqsk"
+    remetente = st.secrets["email"]["remetente"]
+    senha_app = st.secrets["email"]["senha"]
 
     msg = MIMEText(mensagem)
     msg["Subject"] = assunto
@@ -36,7 +41,7 @@ creds = Credentials.from_service_account_info(
 # --- CONEXÃO COM GOOGLE SHEETS ---
 cliente = gspread.authorize(creds)
 planilha = cliente.open_by_key(planilha_chave)
-aba = planilha.sheet1
+aba = planilha.worksheet("iguatemi2")
 
 def carregar_pedidos():
     dados = aba.get_all_records()
@@ -60,7 +65,7 @@ agendamentos_hoje = planilha_Dados[planilha_Dados["Data Agendada"] == hoje]
 # ---CONFIGURAÇÃO DE PAGINA---
 st.set_page_config(" Painel de Agendamentos - Fibra",page_icon= "🌐" , layout="wide")
 
-windows =st.sidebar.radio("home",["Agendamentos - Fibra", "Acompanhamento Geral"])
+windows =st.sidebar.radio("Painéis",["Agendamentos - Fibra", "Acompanhamento Geral"])
 
 if windows == "Agendamentos - Fibra":
 
@@ -68,20 +73,20 @@ if windows == "Agendamentos - Fibra":
 
     col1,col2,col3,col4 = st.columns(4)
 
-    lojas = [" ","LOJA IGUATEMI | BA" , "LOJA IGUATEMI || BA"]
+    lojas_painel1 = ["LOJA IGUATEMI || BA"]
 
     #---APLICAÇÃO DE FILTROS---
     with col1:
-        loja_filtro = st.selectbox("🔍 Buscar por loja",lojas)
+        loja_filtro = st.selectbox("Loja",lojas_painel1,key="loja_fibra")
 
     with col2:
-        nome_filtro = st.text_input("🔍 Buscar por consultor")
+        nome_filtro = st.text_input("🔍 Buscar por consultor",key="nome_fibra")
 
     with col3:
-        ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa")
+        ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa",key="ordem_fibra")
 
     with col4:
-        data_filtro = st.date_input("🔍 Buscar por data")
+        data_filtro = st.date_input("🔍 Buscar por data",key="data_fibra")
 
     #---CONDIÇÕES DE FILTRO
     if loja_filtro:
@@ -193,21 +198,32 @@ if windows == "Agendamentos - Fibra":
     else:
         st.warning("Não tem agendamento pra hoje")
 
-elif windows == "Acompanhamento Geral":
+
+if windows == "Acompanhamento Geral":
+
+    st.title("🌐 Acompanhamento Geral - Fibra")
 
     col1,col2,col3,col4 = st.columns(4)
 
-    lojas = [" ","LOJA IGUATEMI | BA" , "LOJA IGUATEMI || BA"]
+    lojas_painel2 = ["LOJA IGUATEMI || BA"]
+
+    consultores = ["" ,"teste"]
+
+    status_opcoes = ["","Concluído","Agendada","Pendente\(Agendamento\)","Pendente \(Retenção\)", "Cancelado"]
 
     #---APLICAÇÃO DE FILTROS---
     with col1:
-        loja_filtro = st.selectbox("🔍 Buscar por loja",lojas)
+        loja_filtro = st.selectbox("Loja",lojas_painel2,key="painel2")
 
     with col2:
-        nome_filtro = st.text_input("🔍 Buscar por consultor")
+        nome_filtro = st.selectbox("🔍 Buscar por consultor",consultores,key="nome_geral")
 
     with col3:
-        ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa")
+        ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa,",key="ordem_geral")
+    
+    with col4:
+        status_filtro = st.selectbox("🔍 Buscar por Status da Fibra",status_opcoes,key="status_geral")
+    
 
     #---CONDIÇÕES DE FILTRO
     if loja_filtro:
@@ -218,8 +234,11 @@ elif windows == "Acompanhamento Geral":
 
     if ordem_filtro:
         planilha_Dados = planilha_Dados[planilha_Dados["SDR FIXA"].str.contains(ordem_filtro,case =False)]
+    
+    if status_filtro:
+        planilha_Dados = planilha_Dados[planilha_Dados["Status da Fibra"].str.contains(status_filtro,case =False)]
+    
 
-    st.header("🌐 Acompanhamento Geral - Fibra")
 
     st.dataframe(planilha_Dados)
 
@@ -227,9 +246,11 @@ elif windows == "Acompanhamento Geral":
     contagemA = planilha_Dados["Status da Fibra"].astype(str).str.contains("Agendada",case=False,na=False).sum()
     contagemC = planilha_Dados["Status da Fibra"].astype(str).str.contains("Cancelado",case=False,na=False).sum()
     contagemI = planilha_Dados["Status da Fibra"].astype(str).str.contains("Concluído",case=False,na=False).sum()
+    contagemPA = planilha_Dados["Status da Fibra"].astype(str).str.contains("Pendente\(Agendamento\)",case=False,na=False).sum()
+    contagemPr = planilha_Dados["Status da Fibra"].astype(str).str.contains("Pendente \(Retenção\)",case=False,na=False).sum()
     
 
-    colf1,colf2,colf3,colf4 = st.columns(4)
+    colf1,colf2,colf3,colf4,colf5,colf6 = st.columns(6)
 
     with colf1:
         st.text(f"🌐 Total de Fibras : {contagemT}")
@@ -239,12 +260,20 @@ elif windows == "Acompanhamento Geral":
 
     with colf3:
         st.text(f"🟢 Fibras instaladas : {contagemI}")
-
+    
     with colf4:
+        st.text(f"🟡 Pendente(Agendamento) : {contagemPA}")
+    
+    with colf5:
+            st.text(f"🟠 Pendente(Retenção) : {contagemPr}")
+
+    with colf6:
         st.text(f"🔴 Fibras canceladas : {contagemC}")
-    
-    
-    
 
     
+
+
+
+
+
 
