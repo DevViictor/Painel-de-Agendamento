@@ -1,6 +1,15 @@
 import streamlit as st
+from PIL import Image
+from LojaIguatemi1 import iguatemi_loja
+from LojaIguatemi2 import iguatemi2_loja
 
-st.set_page_config(page_title="Login", page_icon="🔒")
+
+st.sidebar.image("image/Image (2).png")
+
+icon = Image.open("image/vivo.png")
+
+st.set_page_config(page_title="Login", page_icon=icon)
+
 
 usuarios = {
     "Iguatemi1": {"senha": "Iguatemi12026", "role": "loja1"},
@@ -8,13 +17,19 @@ usuarios = {
     "Admin":     {"senha": "admin2026",      "role": "admin"}
 }
 
-# Inicializar session_state
+# -----------------------------------------
+# SESSION STATE
+# -----------------------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.user = None
     st.session_state.role = None
 
+# -----------------------------------------
+# LOGIN
+# -----------------------------------------
 def login():
+   
     st.title("Login")
     user = st.text_input("Usuário:")
     password = st.text_input("Senha:", type="password")
@@ -28,19 +43,62 @@ def login():
         else:
             st.error("Usuário ou senha incorretos!")
 
+# -----------------------------------------
+# LOGOUT
+# -----------------------------------------
 def logout():
     st.session_state.logged_in = False
     st.session_state.user = None
     st.session_state.role = None
     st.rerun()
 
-# Roteamento
+# -----------------------------------------
+# NAVEGAÇÃO
+# -----------------------------------------
+def run_navigation():
+    role = st.session_state.role
+
+    # Criar objetos Page
+    page_iguatemi1 = st.Page(iguatemi_loja, title="Loja Iguatemi 1", icon="🏬")
+    page_iguatemi2 = st.Page(iguatemi2_loja, title="Loja Iguatemi 2", icon="🏬")
+
+    # Menus por role
+    if role == "admin":
+        menu = {
+            "Painel Fibra": [
+                page_iguatemi1,
+                page_iguatemi2,
+            ]
+        }
+
+    elif role == "loja1":
+        menu = {
+            "Loja Iguatemi 1": [
+                page_iguatemi1,
+            ]
+        }
+
+    elif role == "loja2":
+        menu = {
+            "Loja Iguatemi 2": [
+                page_iguatemi2,
+            ]
+        }
+
+    # Criar navegação
+    nav = st.navigation(menu)
+
+    # Sidebar com usuário
+    st.sidebar.write(f"👤 Usuário: **{st.session_state.user}**")
+    st.sidebar.button("Sair", on_click=logout)
+
+    # Rodar página selecionada
+    nav.run()
+
+# -----------------------------------------
+# EXECUÇÃO PRINCIPAL
+# -----------------------------------------
 if not st.session_state.logged_in:
     login()
 else:
-    # 🔥 Nome fixo para o menu lateral
-    st.title("Login")
-
-    st.subheader(f"Bem-vindo, {st.session_state.user}")
-    st.sidebar.button("Sair", on_click=logout)
-    st.write("Use o menu à esquerda para acessar a página.")
+    run_navigation()

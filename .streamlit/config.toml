@@ -1,6 +1,8 @@
+
 [theme]
 primaryColor = "#c1820eff"              # Laranja (botões, sliders, seletores)
 backgroundColor = "#800080"        
-secondaryBackgroundColor = "#707f70ff" # Laranja médio (caixas internas, cards)
+secondaryBackgroundColor = "#310327ff" # Laranja médio (caixas internas, cards)
 textColor = "#ffffffff"                 # Texto preto para contraste
 font = "sans serif"
+
