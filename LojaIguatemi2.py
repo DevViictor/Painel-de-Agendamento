@@ -73,7 +73,7 @@ def iguatemi2_loja():
 
 
     # ---CONFIGURAÇÃO DE PAGINA---
-    st.set_page_config(" Painel de Agendamentos - Fibra",page_icon= icon , layout="wide")
+    st.set_page_config(" BACKLOG - FIBRA",page_icon= icon , layout="wide")
 
     windows =st.sidebar.radio("Painéis",["Agendamentos - Fibra", "Acompanhamento Geral"])
 

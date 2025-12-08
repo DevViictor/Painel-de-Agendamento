@@ -70,7 +70,7 @@ def iguatemi_loja():
     agendamentos_hoje = planilha_Dados[planilha_Dados["Data Agendada"] == hoje]
 
     # ---CONFIGURAÇÃO DE PAGINA---
-    st.set_page_config(" Painel de Agendamentos - Fibra",page_icon= icon, layout="wide" )
+    st.set_page_config(" BACKLOG - Fibra",page_icon= icon, layout="wide" )
 
 
     col1,col2,col3 = st.columns(3)
@@ -89,9 +89,9 @@ def iguatemi_loja():
             st.image(image_logo)
 
         with cola:
-            st.title("Painel de Agendamentos - Fibra")
+            st.title("BACKLOG - AGENDAMENTOS")
 
-
+        consultores = ["" , "ANA" , "ANDERSON" , "AMANDA" , "DAVID" , "DEBORA" , "LENE" , "LORENA" , "RODRIGO","teste"]
         col1,col2,col3,col4 = st.columns(4)
 
         lojas_painel1 = ["LOJA IGUATEMI | BA"]
@@ -101,7 +101,7 @@ def iguatemi_loja():
             loja_filtro = st.selectbox("Loja",lojas_painel1,key="loja_fibra")
 
         with col2:
-            nome_filtro = st.text_input("🔍 Buscar por consultor",key="nome_fibra")
+            nome_filtro = st.selectbox("🔍 Buscar por consultor",consultores,key="nome_fibra")
 
         with col3:
             ordem_filtro = st.text_input("🔍 Buscar por SDR da fixa",key="ordem_fibra")
@@ -229,7 +229,7 @@ def iguatemi_loja():
             st.image(image_logo)
 
         with cola:
-            st.title("Acompanhamento Geral - Fibra")
+            st.title("BACKLOG - GERAL")
 
         col1,col2,col3,col4 = st.columns(4)
 
